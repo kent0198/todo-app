@@ -1,4 +1,4 @@
-import { useAxiosWrapper } from "./axiosWrapper";
+/* import { useAxiosWrapper } from "./axiosWrapper";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const axiosWrapper = useAxiosWrapper();
@@ -12,7 +12,7 @@ export const useApi=()=>{
         const body = {
           code: code
         }
-        return axiosWrapper.get(`/visitor`, body)
+        return axiosWrapper.get(`/`, body)
       }
     
-}
+} */
