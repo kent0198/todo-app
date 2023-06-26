@@ -1,11 +1,30 @@
 import React, { useCallback, useRef } from "react";
 import {css} from '@emotion/css'
-import { useRecoilState, useRecoilValue } from "recoil";
+import { DefaultValue, useRecoilState, useRecoilValue } from "recoil";
 import { isModalAboutShowState } from "@store/atoms";
+import { Note } from "@model/note";
+import { useForm } from 'react-hook-form';
+import  {NoteInput} from '@api/notes.api'
+import * as NotesApi from "@api/notes.api"
 
-interface Props{}
+interface Props{
+  onNoteSaved:(note:Note)=>void,
+  noteToEdit?:Note,
+  note?: Note,
+}
 
-const AddNoteDialog = (props:Props) => {
+const AddNoteDialog = ({note,onNoteSaved,noteToEdit}:Props) => {
+  
+ 
+ 
+
+  const { register, handleSubmit, formState: { errors  } } = useForm<NoteInput>({
+    defaultValues: {
+        title: noteToEdit?.title || "",
+        text: noteToEdit?.text || "",
+    }
+  }
+  );
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [isShowModal, setIsShowModal] = useRecoilState(isModalAboutShowState);
@@ -19,25 +38,40 @@ const AddNoteDialog = (props:Props) => {
     }
   }, [containerRef.current, modalRef.current])
 
+
+  async function onSubmit (input:NoteInput){
+    try {
+        let noteResponse:Note;
+        if (noteToEdit){
+          noteResponse=await NotesApi.updateNote(noteToEdit._id, input)
+        }else{
+           noteResponse= await NotesApi.createNote(input);
+        }
+        onNoteSaved(noteResponse);;
+    }catch(error){
+        console.log(error);
+        alert(error);
+    }
+  }
  
   return (
-    <div className={Scontainer} ref={ containerRef } onClick={(e) => handleContainerMouseClick(e)}>
+    <div className={Scontainer} ref={ containerRef } onClick={(e) => {handleContainerMouseClick(e)}}>
           <div className={sContent}  ref={ modalRef } >
                 <div className={sheader}>
-                    Add note
+                   {noteToEdit ? "Edit note" : "Add note" }
                 </div>
                 <hr />
                 <div className={sBlog}>
                     <div className={sInputTilte}>
                         <div className={sTitle}>Title</div>
-                        <input placeholder="Title" autoFocus type="text" className={sInput}/>
+                        <input placeholder="Title" autoFocus type="text" className={sInput} {...register("title",{required:"Required"})}/>
                     </div>
                     <div className={sInputTilte}>
                         <div className={sTitle}>Text</div>
-                        <input placeholder="Text" type="text" className={sInput}/>
+                        <input placeholder="Text" type="text" className={sInput} {...register("text")}/>
                     </div>
                 </div>
-                <button className={sButton} type="submit">nice</button>
+                <button className={pulse}  onClick={handleSubmit(onSubmit)} >Pulse</button>
           </div>
     </div>
   )
@@ -91,14 +125,21 @@ export const sTitle=css`
 `
 export const sInput=css`
   border-radius: 5px;
+  outline: none;
   &:focus{
-    border: 2px solid  rgba(80, 80, 80, 0.4);
+    border: 3px solid  rgba(80, 80, 80, 0.4);
   }
+
 `
-const sButton=css`
+const pulse=css`
+  width: 80px;
+  height: 20px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 5px;
-  
+  margin-left: auto;
+  margin-right: auto;
+  background: linear-gradient(to top right, rgba(210, 221, 243, 0.8) 20%, rgba(252, 206, 200, 0.5) 120%);
+  color: gray;
 `

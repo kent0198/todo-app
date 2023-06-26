@@ -2,14 +2,17 @@ import React from 'react'
 import { Note as NoteModel } from '../models/note'
 import {css} from "@emotion/css"
 import {formatDate} from "@type/formatDate"
+import {MdDelete} from "react-icons/md"
 
 interface NoteProps{
-    note: NoteModel
+    note: NoteModel,
+    onDeleteNoteClicked:(note:NoteModel)=>void,
+    onNoteClicked:(note:NoteModel)=>void,
 }
-const Note = ( props :NoteProps) => {
+const Note = (props :NoteProps) => {
 
 
-    const {note}=props;
+   const {note}=props;
 
 
     let createUpdatedText:string;
@@ -17,14 +20,15 @@ const Note = ( props :NoteProps) => {
         createUpdatedText="Updated: "+formatDate(note.updatedAt);
     }else{
         createUpdatedText="Created: "+formatDate(note.createdAt);
-    }
+    }   
 
     return (
-        <div className={noteCard}>
+        <div className={noteCard} onClick={() => props.onNoteClicked(note)}>
             <div className={cardBody}>
                 <div className={sTitle}>
                     {note.title}
                 </div>
+                    <MdDelete className={sButtonDelete} onClick={()=>{props.onDeleteNoteClicked(note);}}/>
                 <div className={cardText }>
                     {note.text}
                 </div>
@@ -57,7 +61,7 @@ const cardBody =css`
      align-items: center;
      justify-content: center;
      padding: 15px 0;
-     
+     position: relative;
 `
 
 const cardText =css`
@@ -77,6 +81,7 @@ const sTitle=css`
     line-height: 1.5;
     margin-bottom: 20px;
     justify-content: center;
+   
 `
 const sHr=css`
     width: 20rem;
@@ -88,4 +93,16 @@ const SstyleFooter=css`
     align-items: flex-end;
     justify-content: end;
     margin-right: 2em;
+`
+const sButtonDelete=css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 20px;
+    color: #a5a3a3;
+    position: relative;
+    left:90%;
+    bottom: 40px;
+    
 `

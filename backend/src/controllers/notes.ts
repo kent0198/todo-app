@@ -93,7 +93,7 @@ export const updateNote:RequestHandler<UpdateNoteParams, unknown, updateNoteBody
 }
 
 
-/* export const deleteNote: RequestHandler = async (req, res, next) => {
+ export const deleteNote: RequestHandler = async (req, res, next) => {
 
   const noteId = req.params.noteId;
 
@@ -107,12 +107,9 @@ export const updateNote:RequestHandler<UpdateNoteParams, unknown, updateNoteBody
       if (!note) {
           throw createHttpError(404, "Note not found");
       }
-
-     
-      await note.remove();
-
+      await note.deleteOne();
       res.sendStatus(204);
   } catch (error) {
       next(error);
   }
-}; */
+}; 

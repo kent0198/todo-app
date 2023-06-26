@@ -9,3 +9,7 @@ export const isModalAboutShowState = atom<boolean>({
     key: 'isModalAboutShowState',
     default: false
 })
+export const isModalAboutShowStateEdit = atom<boolean>({
+    key: 'isModalAboutShowState',
+    default: false
+})

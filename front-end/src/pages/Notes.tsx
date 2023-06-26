@@ -7,12 +7,14 @@ import AddNoteDialog from "@comp/AddNoteDialog"
 import { colorPrimaryState, isModalAboutShowState } from '@store/atoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
+
 const Notes = () => {
 
 
  /*  const [showAddNoteDialog, setShowAddNoteDialog]= React.useState(false); */
   const [notes, setNotes]=useState<NoteModel[]>([]);
   const [isShowAboutModal, setIsShowAboutModal] = useRecoilState(isModalAboutShowState);
+  const [noteToEdit, setNoteToEdit]=React.useState<NoteModel|null>(null);
 
     useEffect(()=>{
       async function loadNotes(){
@@ -31,15 +33,45 @@ const Notes = () => {
     }, [])
 
 
+    async function deleteNote(note:NoteModel){
+      try{
+          await NotesApi.deleteNote(note._id)
+          setNotes(notes.filter(existingNote=>existingNote._id !==note._id))
+      }catch(error){
+        console.log(error)
+        alert(error);
+      }
+    }
+
   return (
     <div>
-      <button  onClick={ handleAboutClick }>Add new note</button>
+      <button  onClick={ handleAboutClick } className={sButton}>Add new note</button>
       <div className={sContainer}>
         {notes.map(note=>( 
-          <Note note={note} key={note._id}/>
+          <Note 
+            note={note} 
+            key={note._id} 
+            onDeleteNoteClicked={deleteNote}
+            onNoteClicked={setNoteToEdit}
+            />
           ))}
      </div>
-       {isShowAboutModal && <AddNoteDialog />}
+       {isShowAboutModal && 
+          <AddNoteDialog 
+            onNoteSaved={(newNote)=>{
+            setNotes([...notes,newNote]);
+            setIsShowAboutModal(false)}} /> 
+        }
+
+        {noteToEdit && 
+        <AddNoteDialog
+              noteToEdit={noteToEdit}
+              onNoteSaved={(updateNote)=>{
+                setNotes(notes.map(existingNode=>existingNode._id===updateNote._id ? updateNote:existingNode));
+                setNoteToEdit(null);
+              }}
+            />
+        }
   </div>
   )
 }
@@ -47,11 +79,21 @@ const Notes = () => {
 export default Notes
 
 const sContainer=css`
-    padding-top: 10rem;
+    padding-top: 5rem;
     display: flex;
     flex-wrap: wrap;
     justify-content:center;
     gap:20px;
 `
-
-
+const sButton=css`
+   width: 100px;
+  height: 35px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  background: linear-gradient(to top right, rgba(210, 221, 243, 0.8) 20%, rgba(252, 206, 200, 0.5) 120%);
+  color: gray;
+`
