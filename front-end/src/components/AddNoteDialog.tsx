@@ -54,6 +54,7 @@ const AddNoteDialog = ({note,onNoteSaved,noteToEdit}:Props) => {
     }
   }
  
+  
   return (
     <div className={Scontainer} ref={ containerRef } onClick={(e) => {handleContainerMouseClick(e)}}>
           <div className={sContent}  ref={ modalRef } >

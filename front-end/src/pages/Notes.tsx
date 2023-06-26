@@ -6,6 +6,8 @@ import * as NotesApi from "@api/notes.api"
 import AddNoteDialog from "@comp/AddNoteDialog"
 import { colorPrimaryState, isModalAboutShowState } from '@store/atoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { Spinner } from "react-bootstrap"
+import Loading from "@comp/Loading"
 
 
 const Notes = () => {
@@ -16,13 +18,21 @@ const Notes = () => {
   const [isShowAboutModal, setIsShowAboutModal] = useRecoilState(isModalAboutShowState);
   const [noteToEdit, setNoteToEdit]=React.useState<NoteModel|null>(null);
 
+  const [noteLoading, setNoteLoading]=React.useState(true)
+  const [showNoteLoadingError, setShowNoteLoadingError]=React.useState(false)
+
     useEffect(()=>{
       async function loadNotes(){
         try{
+          setShowNoteLoadingError(false)
+          setNoteLoading(true);
           const response= await NotesApi.fetchNotes()
           setNotes(response)
         }catch(error){
           alert(error);
+          setShowNoteLoadingError(true)
+        }finally{
+          setNoteLoading(false)
         }
       } 
       loadNotes();
@@ -43,10 +53,10 @@ const Notes = () => {
       }
     }
 
-  return (
-    <div>
-      <button  onClick={ handleAboutClick } className={sButton}>Add new note</button>
-      <div className={sContainer}>
+
+    const noteGrip=
+
+     <div className={sContainer}>
         {notes.map(note=>( 
           <Note 
             note={note} 
@@ -56,6 +66,20 @@ const Notes = () => {
             />
           ))}
      </div>
+  return (
+    <div>
+      <button  onClick={ handleAboutClick } className={sButton}>Add new note</button>
+      
+        {noteLoading && <Loading/>}
+
+        {showNoteLoadingError && <p>Something went wrong</p>}
+        {!noteLoading && !showNoteLoadingError && 
+        <>
+          {
+            notes.length >0 ? noteGrip : <p>You don't have any notes yet</p>
+          }
+        </>
+        }
        {isShowAboutModal && 
           <AddNoteDialog 
             onNoteSaved={(newNote)=>{
