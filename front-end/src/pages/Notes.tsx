@@ -70,7 +70,7 @@ const Notes = () => {
     <div>
       <button  onClick={ handleAboutClick } className={sButton}>Add new note</button>
       
-        {noteLoading && <Loading/>}
+        {noteLoading && <Loading />}
 
         {showNoteLoadingError && <p>Something went wrong</p>}
         {!noteLoading && !showNoteLoadingError && 

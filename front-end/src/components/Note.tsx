@@ -79,7 +79,7 @@ const sTitle=css`
     max-height: 4.55em;
     overflow: hidden;
     line-height: 1.5;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     justify-content: center;
    
 `
