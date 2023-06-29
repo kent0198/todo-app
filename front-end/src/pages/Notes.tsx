@@ -10,6 +10,7 @@ import { Spinner } from "react-bootstrap"
 import Loading from "@comp/Loading"
 import SignUpModal from "@comp/SignUpModal"
 import LoginModal from "@comp/LoginModal"
+import NavbarModal from "@comp/NavbarModal"
 
 
 const Notes = () => {
@@ -69,7 +70,14 @@ const Notes = () => {
           ))}
      </div>
   return (
+    <>
     <div>
+      <NavbarModal
+        loggedInUser={null}
+        onLoginClicked={() => {}}
+        onSignUpClicked={() => {}}
+        onLogoutSuccessful={() => {}}
+      />
       <button  onClick={ handleAboutClick } className={sButton}>Add new note</button>
       
         {noteLoading && <Loading />}
@@ -84,27 +92,27 @@ const Notes = () => {
         }
        {isShowAboutModal && 
           <AddNoteDialog 
-            onNoteSaved={(newNote)=>{
+          onNoteSaved={(newNote)=>{
             setNotes([...notes,newNote]);
             setIsShowAboutModal(false)}} /> 
-        }
+          }
 
         {noteToEdit && 
         <AddNoteDialog
-              noteToEdit={noteToEdit}
-              onNoteSaved={(updateNote)=>{
-                setNotes(notes.map(existingNode=>existingNode._id===updateNote._id ? updateNote:existingNode));
-                setNoteToEdit(null);
-              }}
-            />
-        }
+        noteToEdit={noteToEdit}
+        onNoteSaved={(updateNote)=>{
+          setNotes(notes.map(existingNode=>existingNode._id===updateNote._id ? updateNote:existingNode));
+          setNoteToEdit(null);
+        }}
+        />
+      }
         
         {false &&
           <SignUpModal
             onDismiss={()=>{}}
             onSignUpSuccessful={()=>{}}
-          />
-        }
+            />
+          }
         {
           true &&
           <LoginModal
@@ -112,7 +120,8 @@ const Notes = () => {
           onLoginSuccessful={()=>{}}
           />
         }
-  </div>
+    </div>
+   </>
   )
 }
 

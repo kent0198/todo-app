@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import "@style/index.css"
 import { RecoilRoot } from 'recoil'
+import { BrowserRouter } from 'react-router-dom'
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <RecoilRoot>
-      <React.StrictMode>
+     <BrowserRouter>
         <App />
-      </React.StrictMode>,
+     </BrowserRouter>
   </RecoilRoot>
 )

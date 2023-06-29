@@ -39,7 +39,7 @@ const LoginModal = ({onDismiss,onLoginSuccessful}:LoginModalProps) => {
             </div>
             <div className={sInputTilte}>
                 <div className={sTitle}>Password</div>
-                <input placeholder="password" type="password" className={sInput} {...register("password")}/>
+                <input type="password" className={sInput} {...register("password")}/>
             </div>
         </form>
     {/*     <DevTool control={control}/> */}
