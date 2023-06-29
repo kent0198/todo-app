@@ -1,4 +1,5 @@
 import { Note } from "@model/note";
+import { User } from "@model/user";
 
 async function fetchdata(input :RequestInfo,init?:RequestInit){
     const response=await fetch(input, init);
@@ -53,4 +54,47 @@ export async function updateNote (noteId:string, note:NoteInput):Promise<Note>{
             body:JSON.stringify(note)
         });
         return response.json();  
+}
+
+export async function getLoggedInUser ():Promise<User>{
+
+    const response=await fetchdata("/api/users",{method:"GET"});
+
+    return response.json();
+
+}
+export interface SignUpCredenttials{
+    username:string,
+    email:string,
+    password:string,
+}
+
+export async function signUp(credentials:SignUpCredenttials):Promise<User>{
+    const response=await fetchdata("/api/users/signup",{method:"POST",
+    headers:{
+        "Content-Type": "application/json",
+    },
+    body:JSON.stringify(credentials)
+});
+return response.json();
+    
+}
+
+export interface LoginCredentials{
+    username:string,
+    password:string,
+}
+export async function login (credentials:LoginCredentials):Promise<User>{
+    const response=await fetchdata("/api/users/login",{method:"POST",
+    headers:{
+        "Content-Type": "application/json",
+    },
+    body:JSON.stringify(credentials)
+});
+return response.json();
+    
+}
+
+export async function logout(){
+    await fetchdata("/api/users/logout",{method:"POST"});
 }

@@ -14,5 +14,8 @@ export default defineConfig({
         rewrite: (path) => { console.log(path); return path.replace('/^/api/', '') }
       },
     }
-  }
+  },
+  optimizeDeps: {
+    exclude: ['react-hook-form'],
+  },
 })

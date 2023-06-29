@@ -6,6 +6,8 @@ import { Note } from "@model/note";
 import { useForm } from 'react-hook-form';
 import  {NoteInput} from '@api/notes.api'
 import * as NotesApi from "@api/notes.api"
+import TextInputField from "./form/TextInputField";
+
 
 interface Props{
   onNoteSaved:(note:Note)=>void,
@@ -57,12 +59,30 @@ const AddNoteDialog = ({note,onNoteSaved,noteToEdit}:Props) => {
   
   return (
     <div className={Scontainer} ref={ containerRef } onClick={(e) => {handleContainerMouseClick(e)}}>
+
           <div className={sContent}  ref={ modalRef } >
                 <div className={sheader}>
                    {noteToEdit ? "Edit note" : "Add note" }
                 </div>
                 <hr />
                 <div className={sBlog}>
+              {/*     <TextInputField
+                      name="title"
+                      lable="Title"
+                      type="text"
+                      placeholder="Title"
+                      register={register}
+                      registerOptions={{required:"Required"}}
+                      error={errors.title}
+                  />
+                  <TextInputField
+                    name="text"
+                    lable="Text"
+                    as="textares"
+                    row={5}
+                    placeholder="Text"
+                    register={register}
+                  /> */}
                     <div className={sInputTilte}>
                         <div className={sTitle}>Title</div>
                         <input placeholder="Title" autoFocus type="text" className={sInput} {...register("title",{required:"Required"})}/>
@@ -132,7 +152,7 @@ export const sInput=css`
   }
 
 `
-const pulse=css`
+export const pulse=css`
   width: 80px;
   height: 20px;
   border-radius: 5px;

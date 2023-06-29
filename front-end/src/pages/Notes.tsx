@@ -8,6 +8,8 @@ import { colorPrimaryState, isModalAboutShowState } from '@store/atoms';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Spinner } from "react-bootstrap"
 import Loading from "@comp/Loading"
+import SignUpModal from "@comp/SignUpModal"
+import LoginModal from "@comp/LoginModal"
 
 
 const Notes = () => {
@@ -95,6 +97,20 @@ const Notes = () => {
                 setNoteToEdit(null);
               }}
             />
+        }
+        
+        {false &&
+          <SignUpModal
+            onDismiss={()=>{}}
+            onSignUpSuccessful={()=>{}}
+          />
+        }
+        {
+          true &&
+          <LoginModal
+          onDismiss={()=>{}}
+          onLoginSuccessful={()=>{}}
+          />
         }
   </div>
   )
